@@ -33,32 +33,33 @@
 // 	return 0;
 // }
 
-#include <iostream>
+// virtual destructor C++
+#include<iostream>
+
 using namespace std;
 
-class Animal {
+class Base{
 public:
-	void sound() {
-		cout << "some sound" << endl;
+	virtual ~Base() {
+		cout << "Base's destructor" << endl;
 	}
 };
 
-class Dog : public Animal {
+class Derived : public Base {
 public:
-	void sound() {
-		cout << "woof woof" << endl;
-	}
-	void play() {
-		cout << "The dog is playing" << endl;
+	~Derived() {
+		cout << "Derived's destructor" << endl;
 	}
 };
 
 int main() {
-	Animal animal;
-	Dog* d = (Dog*)&animal;
-
-	d->sound();
-	d->play();
-
+	Base* b = new Derived();
+	delete b;
 	return 0;
 }
+
+//Khi delete b; được gọi:
+// 	Vì hàm hủy của Base là ảo, C++ sẽ gọi đúng thứ tự hủy:
+// 		~Derived() → in ra "Derived's destructor"
+// 		~Base() → in ra "Base's destructor"
+//Nếu hàm hủy của Base không phải là ảo, chỉ có ~Base() được gọi, dẫn đến rò rỉ bộ nhớ cho phần Derived.
